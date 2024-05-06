@@ -9,21 +9,32 @@ if (localStorage.getItem("playerCardsImage")){
 	document.querySelector(`#card-player-3`).src = playerCards[2];
 	document.querySelector(`#card-player-4`).src = playerCards[3];
 	
-	document.querySelector(`#card-bot-1`).src = botCards[0];
-	document.querySelector(`#card-bot-2`).src = "https://www.deckofcardsapi.com/static/img/back.png";
+	if (localStorage.getItem("botShow") == "true"){
+		for (i = 1; i <= Number(localStorage.getItem("drawBot")); i++){
+			document.querySelector(`#card-bot-${i}`).src = botCards[i - 1];
+		}
+	}
+	else{
+	document.querySelector(`#card-bot-1`).src = "https://www.deckofcardsapi.com/static/img/back.png";
+	document.querySelector(`#card-bot-2`).src = botCards[1];
+	}
 
+	if (localStorage.getItem("stand") == "true"){
+		stand();
+	}
+	else{
 	overTwentyOne("player", "playerCardsValue");
+	overTwentyOne("bot", "botCardsValue");
+	}
 }
 
 document.querySelector("#get-deck").addEventListener("click", function(event)
 {
-    event.preventDefault();
     startGame();
 });
 
 document.querySelector("#hit").addEventListener("click", function(event)
 {
-    event.preventDefault();
 	drawCard("player", "playerCardsImage", "playerCardsValue");
 });
 
@@ -31,13 +42,13 @@ localStorage.setItem("test", 0);
 
 document.querySelector("#stand").addEventListener("click", function(event)
 {
-    event.preventDefault();
 	stand();
 });
 
 
 function startGame()
 {
+
 	// Reset cards
 	if (localStorage.getItem("drawBot")){
 		for (i = 1; i <= localStorage.getItem("drawBot"); i++){
@@ -55,11 +66,13 @@ function startGame()
 	document.querySelector("#stand").classList.remove("hide");
 	document.querySelector("#winner").innerText = "";
 
-	// Reet all game related local vlues
-	localStorage.setItem("playerCardsImage", 0);
-	localStorage.setItem("playerCardsValue", 0);
-	localStorage.setItem("botCardsImage", 0);
-	localStorage.setItem("botCardsValue", 0);
+	// Reset all game related local vlues
+	localStorage.removeItem("botShow");
+	localStorage.removeItem("stand");
+	localStorage.removeItem("playerCardsImage");
+	localStorage.removeItem("playerCardsValue");
+	localStorage.removeItem("botCardsImage");
+	localStorage.removeItem("botCardsValue");
 	localStorage.setItem("draw", 2);
 	localStorage.setItem("drawBot", 2);
 
@@ -87,8 +100,8 @@ function startGame()
 
 							document.querySelector(`#card-player-1`).src = data.cards[0].image;
 							document.querySelector(`#card-player-2`).src = data.cards[2].image;
-							document.querySelector(`#card-bot-1`).src = data.cards[1].image;
-							document.querySelector(`#card-bot-2`).src = "https://www.deckofcardsapi.com/static/img/back.png";
+							document.querySelector(`#card-bot-1`).src = "https://www.deckofcardsapi.com/static/img/back.png";
+							document.querySelector(`#card-bot-2`).src = data.cards[3].image;
 						
 							localStorage.setItem("playerCardsImage", [data.cards[0].image, data.cards[2].image]);
 							localStorage.setItem("botCardsImage", [data.cards[1].image, data.cards[3].image])
@@ -97,6 +110,7 @@ function startGame()
 							localStorage.setItem("botCardsValue", [data.cards[1].value, data.cards[3].value])
 							
 							overTwentyOne("player", "playerCardsValue");
+							overTwentyOne("bot", "botCardsValue");
 						})
 			}
 		})
@@ -125,8 +139,8 @@ function newDeck()
 						.then(data => {
 							document.querySelector(`#card-player-1`).src = data.cards[0].image;
 							document.querySelector(`#card-player-2`).src = data.cards[2].image;
-							document.querySelector(`#card-bot-1`).src = data.cards[1].image;
-							document.querySelector(`#card-bot-2`).src = "https://www.deckofcardsapi.com/static/img/back.png";
+							document.querySelector(`#card-bot-1`).src = "https://www.deckofcardsapi.com/static/img/back.png";
+							document.querySelector(`#card-bot-2`).src = data.cards[3].image;
 						
 							localStorage.setItem("playerCardsImage", [data.cards[0].image, data.cards[2].image]);
 							localStorage.setItem("botCardsImage", [data.cards[1].image, data.cards[3].image])
@@ -137,9 +151,10 @@ function newDeck()
 				});
 			
 	overTwentyOne("player", "playerCardsValue");
+	overTwentyOne("bot", "botCardsValue");
 }
 
-function drawCard(entity, image, value)
+async function drawCard(entity, image, value)
 {
 	let draw = 0;
 	let entities = entity;
@@ -150,18 +165,18 @@ function drawCard(entity, image, value)
 		draw = localStorage.getItem("draw")
 	}
 	else{
-		let botCardsArr = localStorage.getItem("botCardsValue").split(",");
-		draw = botCardsArr.length + 1;
+		localStorage.setItem("drawBot",Number(localStorage.getItem("drawBot")) +1);
+		draw = localStorage.getItem("drawBot");
 	}
 
 	let deckId = localStorage.getItem("deckId");
-	const url = `https://www.deckofcardsapi.com/api/deck/${deckId}/draw/?count=2`;
+	const url = `https://www.deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`;
     const options = {
         method : "GET"
     };
 
 	// Draw a card from deck
-	fetch(url, options)
+	await fetch(url, options)
         .then(response => response.json())
         .then(data => {
 			console.log(data);
@@ -180,21 +195,22 @@ function drawCard(entity, image, value)
 }
 
 /////// MAKE AUTOMATIC
-function stand()
+async function stand()
 {
+	localStorage.setItem("botShow", "true");
+	localStorage.setItem("stand", "true");
+
 	let botCards = localStorage.getItem("botCardsImage").split(",");
-	document.querySelector("#card-bot-2").src = botCards[1];
+	document.querySelector("#card-bot-1").src = botCards[0];
 
-	overTwentyOne("player", "playerCardsValue");
-	overTwentyOne("bot", "botCardsValue");
-
-
-	if (Number(localStorage.getItem("botSum")) < Number(localStorage.getItem("playerSum")) &&
+	// While loop doesnt work, even with await????
+	while (Number(localStorage.getItem("botSum")) < Number(localStorage.getItem("playerSum")) &&
 	Number(localStorage.getItem("botSum")) < 17){
-		localStorage.setItem("drawBot",Number(localStorage.getItem("drawBot")) +1);
-		drawCard("bot", "botCardsImage", "botCardsValue");
+		await new Promise(resolve => setTimeout(resolve, 1000)) .then(() => { console.log('1 second passed'); });
+		await drawCard("bot", "botCardsImage", "botCardsValue");
 	}
-	else if (Number(localStorage.getItem("botSum")) > Number(localStorage.getItem("playerSum")) &&
+
+	if (Number(localStorage.getItem("botSum")) > Number(localStorage.getItem("playerSum")) &&
 	Number(localStorage.getItem("botSum")) <= 21){
 		document.querySelector("#winner").innerText = "Dealer has higher hand! You Lose!";
 		end();
@@ -246,7 +262,7 @@ function overTwentyOne(entity, storage)
 	}
 
 	for (i = 0; i < aceCount; i++){
-		if ((value + 11) > 21){
+		if ((value + 11 + aceCount - i - 1) > 21){
 			value++;
 		}
 		else{
