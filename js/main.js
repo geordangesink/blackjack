@@ -197,6 +197,8 @@ async function drawCard(entity, image, value)
 /////// MAKE AUTOMATIC
 async function stand()
 {
+	overTwentyOne("player", "playerCardsValue");
+	overTwentyOne("bot", "botCardsValue");
 	localStorage.setItem("botShow", "true");
 	localStorage.setItem("stand", "true");
 
