@@ -22,11 +22,86 @@
 /*******************************************/
 
 body {
-
+  background-color: rgb(43, 43, 43);
+  color: rgb(230, 226, 216);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .hide{
   display: none;
+}
+
+h1{
+  margin-bottom: 0;
+}
+
+main{
+
+}
+
+#banner{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgb(128, 128, 204);
+  border-bottom: 10px outset rgba(0, 0, 0, 0.521);
+}
+
+#banner > p{
+  margin-top: 0;
+  font-size: 0.8rem;
+}
+
+.entities{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.entities > p{
+  margin-top: 0;
+}
+
+.entities > h2, #game-buttons, #winner, #error{
+  margin-bottom: 5px;
+}
+
+  #game-buttons *{
+    background-color: rgb(82, 82, 82);
+    color: rgb(230, 226, 216);
+    border-radius: 4px;
+  }
+
+.entities > h2{
+  font-size: 1rem;
+}
+
+#winner, #error{
+  font-size: 1.5rem;
+}
+
+.cards-container{
+  width: 800px;
+  height: 200px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.cards-container *{
+ height: 100%;
+ opacity: 90%;
+}
+
+#game-actions{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 
@@ -44,3 +119,13 @@ footer {
 /******************************************
 /* ADDITIONAL STYLES
 /*******************************************/
+
+@media screen and (max-width: 800px) {
+  .cards-container{
+    width: 350px;
+    height: 70px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+}

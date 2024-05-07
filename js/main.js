@@ -4,27 +4,25 @@
 if (localStorage.getItem("playerCardsImage")){
 	let playerCards = localStorage.getItem("playerCardsImage").split(",");
 	let botCards = localStorage.getItem("botCardsImage").split(",");
-	document.querySelector(`#card-player-1`).src = playerCards[0];
-	document.querySelector(`#card-player-2`).src = playerCards[1];
-	document.querySelector(`#card-player-3`).src = playerCards[2];
-	document.querySelector(`#card-player-4`).src = playerCards[3];
+
+	for (i = 0; i < playerCards.length; i++){
+		document.querySelector(`#card-player-${i+1}`).src = playerCards[i];
+	}
 	
 	if (localStorage.getItem("botShow") == "true"){
 		for (i = 1; i <= Number(localStorage.getItem("drawBot")); i++){
 			document.querySelector(`#card-bot-${i}`).src = botCards[i - 1];
 		}
-	}
-	else{
-	document.querySelector(`#card-bot-1`).src = "https://www.deckofcardsapi.com/static/img/back.png";
-	document.querySelector(`#card-bot-2`).src = botCards[1];
-	}
-
-	if (localStorage.getItem("stand") == "true"){
 		stand();
+		document.querySelector("#points-bot").innerText = `(${localStorage.getItem("botSum")})`;
 	}
 	else{
-	overTwentyOne("player", "playerCardsValue");
-	overTwentyOne("bot", "botCardsValue");
+		document.querySelector(`#card-bot-1`).src = "https://www.deckofcardsapi.com/static/img/back.png";
+		document.querySelector(`#card-bot-2`).src = botCards[1];
+
+		overTwentyOne("player", "playerCardsValue");
+		overTwentyOne("bot", "botCardsValue");
+		document.querySelector("#points-bot").innerText = `(? + ${overTwentyOne("botNoShow", "botCardsValue")})`;
 	}
 }
 
@@ -68,7 +66,6 @@ function startGame()
 
 	// Reset all game related local vlues
 	localStorage.removeItem("botShow");
-	localStorage.removeItem("stand");
 	localStorage.removeItem("playerCardsImage");
 	localStorage.removeItem("playerCardsValue");
 	localStorage.removeItem("botCardsImage");
@@ -111,6 +108,7 @@ function startGame()
 							
 							overTwentyOne("player", "playerCardsValue");
 							overTwentyOne("bot", "botCardsValue");
+							document.querySelector("#points-bot").innerText = `(? + ${overTwentyOne("botNoShow", "botCardsValue")})`;
 						})
 			}
 		})
@@ -148,10 +146,17 @@ function newDeck()
 							localStorage.setItem("playerCardsValue", [data.cards[0].value, data.cards[2].value]);
 							localStorage.setItem("botCardsValue", [data.cards[1].value, data.cards[3].value])
 						})
-				});
+						.catch(err =>{
+							document.querySelector("#error").innerText = `unexpected error -> ${err} \n Try again`;
+						})
+				})
+				.catch(err =>{
+					document.querySelector("#error").innerText = `Problems fetching card deck from API server \n-> ${err}`;
+				})
 			
 	overTwentyOne("player", "playerCardsValue");
 	overTwentyOne("bot", "botCardsValue");
+	document.querySelector("#points-bot").innerText = `(? + ${overTwentyOne("botNoShow", "botCardsValue")})`;
 }
 
 async function drawCard(entity, image, value)
@@ -200,35 +205,33 @@ async function stand()
 	overTwentyOne("player", "playerCardsValue");
 	overTwentyOne("bot", "botCardsValue");
 	localStorage.setItem("botShow", "true");
-	localStorage.setItem("stand", "true");
 
 	let botCards = localStorage.getItem("botCardsImage").split(",");
 	document.querySelector("#card-bot-1").src = botCards[0];
 
+	document.querySelector("#points-bot").innerText = `(${localStorage.getItem("botSum")})`;
+
 	// While loop doesnt work, even with await????
 	while (Number(localStorage.getItem("botSum")) < Number(localStorage.getItem("playerSum")) &&
 	Number(localStorage.getItem("botSum")) < 17){
-		await new Promise(resolve => setTimeout(resolve, 1000)) .then(() => { console.log('1 second passed'); });
+		await new Promise(resolve => setTimeout(resolve, 500));
 		await drawCard("bot", "botCardsImage", "botCardsValue");
+		document.querySelector("#points-bot").innerText = `(${localStorage.getItem("botSum")})`;
 	}
 
 	if (Number(localStorage.getItem("botSum")) > Number(localStorage.getItem("playerSum")) &&
 	Number(localStorage.getItem("botSum")) <= 21){
-		document.querySelector("#winner").innerText = "Dealer has higher hand! You Lose!";
-		end();
+		end("dealerHigher");
 	}
 	else if (Number(localStorage.getItem("botSum")) < Number(localStorage.getItem("playerSum")) &&
 	Number(localStorage.getItem("botSum")) >= 17){
-		document.querySelector("#winner").innerText = "You have a higher hand! You Win!";
-		end();
+		end("playerHigher");
 	}
 	else if (Number(localStorage.getItem("botSum")) == Number(localStorage.getItem("playerSum"))){
-		document.querySelector("#winner").innerText = "It's a Tie!";
-		end();
+		end("tie");
 	}
 	else{
-		document.querySelector("#winner").innerText = "You Win!";
-		end();
+		end("dealerBust");
 	}
 
 }
@@ -236,11 +239,18 @@ async function stand()
 function overTwentyOne(entity, storage)
 {
 	let playerValue = localStorage.getItem(storage).split(",")
+	let amountOfCards = playerValue.length;
 	let aceCount = 0;
 	let value = 0;
+	let counterNoShow = 0;
 
-	for (i = 0; i < playerValue.length; i++){
-		switch(playerValue[i]){
+	if (entity === "botNoShow"){
+		amountOfCards = 1;
+		counterNoShow = 1;
+	}
+
+	for (i = 0; i < amountOfCards; i++){
+		switch(playerValue[i+counterNoShow]){
 			case "ACE":
 				aceCount++;
 				break;
@@ -258,7 +268,7 @@ function overTwentyOne(entity, storage)
 				break;
 			
 			default:
-				value += Number(playerValue[i]);
+				value += Number(playerValue[i+counterNoShow]);
 				break;
 		}
 	}
@@ -273,23 +283,26 @@ function overTwentyOne(entity, storage)
 	}
 
 	if ( entity == "player"){
-		if (value > 21){
-			end();
 
-			document.querySelector("#winner").innerText = "BUST! You Lose!";
+		localStorage.setItem("playerSum", value);
+		document.querySelector("#points-player").innerText = `(${localStorage.getItem("playerSum")})`;
+
+		if (value > 21){
+			end("playerBust");
 		}
 
 		else if (value == 21){
-			end();
-
-			document.querySelector("#winner").innerText = "BLACK JACK! You Win!";
+			end("playerBlackJack");
 		}
 
 		else{
 			document.querySelector("#hit").classList.remove("hide");
 			document.querySelector("#stand").classList.remove("hide");
 		}
-		localStorage.setItem("playerSum", value);
+	}
+
+	else if ( entity === "botNoShow"){
+		return value;
 	}
 
 	else{
@@ -297,8 +310,37 @@ function overTwentyOne(entity, storage)
 	}
 }
 
-function end()
+async function end(statement)
 {
+	await new Promise(resolve => setTimeout(resolve, 500));
 	document.querySelector("#hit").classList.add("hide");
 	document.querySelector("#stand").classList.add("hide");
+	
+	switch(statement){
+
+		case "playerBust":
+			document.querySelector("#winner").innerText = "BUST! You Lose!";
+			break;
+
+		case "playerBlackJack":
+			document.querySelector("#winner").innerText = "BLACK JACK! You Win!";
+			break;
+
+		case "playerHigher":
+			document.querySelector("#winner").innerText = "You have a higher hand! You Win!";
+			break;
+
+		case "dealerBust":
+			document.querySelector("#winner").innerText = "Dealer went over 21, You Win!";
+			break;
+		
+		case "dealerHigher":
+			document.querySelector("#winner").innerText = "Dealer has a higher hand! You Lose!";
+			break;
+
+		default: // Tie
+			document.querySelector("#winner").innerText = "It's a Tie!";
+			break;
+
+	}
 }
