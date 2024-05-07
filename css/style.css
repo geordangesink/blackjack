@@ -30,16 +30,8 @@ body {
   align-items: center;
 }
 
-.hide{
-  display: none;
-}
-
 h1{
   margin-bottom: 0;
-}
-
-main{
-
 }
 
 #banner{
@@ -104,7 +96,13 @@ main{
   justify-content: center;
 }
 
+.test{
+  opacity: 10%;
+}
 
+.hide{
+  display: none;
+}
 /******************************************
 /* LAYOUT
 /*******************************************/

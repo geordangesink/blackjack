@@ -46,18 +46,22 @@ document.querySelector("#stand").addEventListener("click", function(event)
 
 function startGame()
 {
-
-	// Reset cards
+	// Reset cards  1.1.1
 	if (localStorage.getItem("drawBot")){
-		for (i = 1; i <= localStorage.getItem("drawBot"); i++){
-			document.querySelector(`#card-bot-${i}`).src = "";
+		for (i = 1; i <= 21; i++){
+			document.querySelector(`#card-bot-${i}`).remove();
+			let newElement = document.createElement("img");
+			newElement.id = `card-bot-${i}`
+			document.querySelector("#cards-container-bot").appendChild(newElement);
+		}
+		for (i = 1; i <= 21; i++){
+			document.querySelector(`#card-player-${i}`).remove();
+			let newElement = document.createElement("img");
+			newElement.id = `card-player-${i}`
+			document.querySelector("#cards-container-player").appendChild(newElement);
 		}
 	}
 
-	for (i = 1; i <= Number(localStorage.getItem("draw")); i++){
-		document.querySelector(`#card-player-${i}`).src = "";
-		document.querySelector(`#card-bot-${i}`).src = "";
-	}
 
 	// Show buttons and delete Win/Lose announcement
 	document.querySelector("#hit").classList.remove("hide");
