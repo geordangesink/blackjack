@@ -43,6 +43,18 @@ h1{
   border-bottom: 10px outset rgba(0, 0, 0, 0.521);
 }
 
+.hide{
+  display: none;
+}
+
+
+/******************************************
+/* LAYOUT
+/*******************************************/
+header {
+
+}
+
 #banner > p{
   margin-top: 0;
   font-size: 0.8rem;
@@ -90,24 +102,39 @@ h1{
 }
 
 #game-actions{
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.test{
-  opacity: 10%;
+.points{
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 }
 
-.hide{
-  display: none;
+.bids, .current{
+  width: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-/******************************************
-/* LAYOUT
-/*******************************************/
-header {
 
+.bids *, .current *{
+  margin: 2px 5px;
+}
+
+#balance-too-low{
+  display: flex;
+  align-items: center;
+}
+
+#balance-too-low > p{
+  margin: 0 5px;
 }
 
 footer {

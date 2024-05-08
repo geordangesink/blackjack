@@ -1,165 +1,87 @@
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-  	<meta charset="utf-8">
-  	<meta name="description" content="Your description goes here">
-  	<meta name="keywords" content="one, two, three">
+	  	<meta charset="utf-8">
+	  	<meta name="description" content="Your description goes here">
+	  	<meta name="keywords" content="one, two, three">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		
-		<title>Blackjack 1.1.1</title>
+		<title>Blackjack 1.2</title>
 
-		<!-- external CSS link -->
-	<!-- <link rel="stylesheet" href="css/normalize.css"> -->
 		<link rel="stylesheet" href="css/style.css">
-		<!DOCTYPE html>
-		<html lang="en">
-			<head>
-			  <meta charset="utf-8">
-			  <meta name="description" content="Your description goes here">
-			  <meta name="keywords" content="one, two, three">
-				<meta name="viewport" content="width=device-width, initial-scale=1">
-				
-				<title>Blackjack 1.1.1</title>
-		
-				<!-- external CSS link -->
-			<!-- <link rel="stylesheet" href="css/normalize.css"> -->
-				<link rel="stylesheet" href="css/style.css">
-			</head>
-			<body>
-				<section id="banner">
-					<h1>JackBlackJack</h1>
-					<p>(<i>Version 1.1.1</i>)</p>
-				</section>
-				
-				<main>
-					<section class="entities" id="player">
-						<h2 id="error"></h2>
-						<h2 id="winner"></h2>
-						<h2>Player</h2>
-						
-						<section id="game-actions">
-							<section id="game-buttons">
-								<button id="get-deck">Re-/Start Game</button>
-								<button class="hide" id="hit">Hit</button>
-								<button class="hide" id="stand">Stand</button>
-							</section>
-							
-						</section>
-					
-						<p id="points-player"></p>
-						
-						<section id="cards-container-player" class="cards-container">
-							<img class="cards" id="card-player-1" src="" alt="">
-							<img class="cards" id="card-player-2" src="" alt="">
-							<img class="cards" id="card-player-3" src="" alt="">
-							<img class="cards" id="card-player-4" src="" alt="">
-							<img class="cards" id="card-player-5" src="" alt="">
-							<img class="cards" id="card-player-6" src="" alt="">
-							<img class="cards" id="card-player-7" src="" alt="">
-							<img class="cards" id="card-player-8" src="" alt="">
-							<img class="cards" id="card-player-9" src="" alt="">
-							<img class="cards" id="card-player-10" src="" alt="">
-							<img class="cards" id="card-player-11" src="" alt="">
-							<img class="cards" id="card-player-12" src="" alt="">
-							<img class="cards" id="card-player-13" src="" alt="">
-							<img class="cards" id="card-player-14" src="" alt="">
-							<img class="cards" id="card-player-15" src="" alt="">
-							<img class="cards" id="card-player-16" src="" alt="">
-							<img class="cards" id="card-player-17" src="" alt="">
-							<img class="cards" id="card-player-18" src="" alt="">
-							<img class="cards" id="card-player-19" src="" alt="">
-							<img class="cards" id="card-player-20" src="" alt="">
-							<img class="cards" id="card-player-21" src="" alt="">
-						</section>
-					</section>
-		
-				<section class="entities" id="bot-dealer">
-					<h2>Dealer</h2>
-					<p id="points-bot"></p>
-		
-					<section id="cards-container-bot" class="cards-container">
-						<img class="cards" id="card-bot-1" src="" alt="">
-						<img class="cards" id="card-bot-2" src="" alt="">
-						<img class="cards" id="card-bot-3" src="" alt="">
-						<img class="cards" id="card-bot-4" src="" alt="">
-						<img class="cards" id="card-bot-5" src="" alt="">
-						<img class="cards" id="card-bot-6" src="" alt="">
-						<img class="cards" id="card-bot-7" src="" alt="">
-						<img class="cards" id="card-bot-8" src="" alt="">
-						<img class="cards" id="card-bot-9" src="" alt="">
-						<img class="cards" id="card-bot-10" src="" alt="">
-						<img class="cards" id="card-bot-11" src="" alt="">
-						<img class="cards" id="card-bot-12" src="" alt="">
-						<img class="cards" id="card-bot-13" src="" alt="">
-						<img class="cards" id="card-bot-14" src="" alt="">
-						<img class="cards" id="card-bot-15" src="" alt="">
-						<img class="cards" id="card-bot-16" src="" alt="">
-						<img class="cards" id="card-bot-17" src="" alt="">
-						<img class="cards" id="card-bot-18" src="" alt="">
-						<img class="cards" id="card-bot-19" src="" alt="">
-						<img class="cards" id="card-bot-20" src="" alt="">
-						<img class="cards" id="card-bot-21" src="" alt="">
-					</section>
-				</section>
-			</main>
-		
-				<script type="text/javascript" src="js/main.js"></script>
-			</body>
-		</html>
-		</head>
+	</head>
 	<body>
 		<section id="banner">
 			<h1>JackBlackJack</h1>
-			<p>(<i>Version 1.1</i>)</p>
+			<p>(<i>Version 1.2</i>)</p>
 		</section>
 		
-		<main>
-			<section class="entities" id="player">
-				<h2 id="error"></h2>
-				<h2 id="winner"></h2>
-				<h2>Player</h2>
-				
-				<section id="game-actions">
-					<section id="game-buttons">
-						<button id="get-deck">Re-/Start Game</button>
-						<button class="hide" id="hit">Hit</button>
-						<button class="hide" id="stand">Stand</button>
-					</section>
-					
-				</section>
+	<main class="hide" id="main">
+		<section class="entities" id="player">
+			<h2 id="error"></h2>
+			<h2 id="winner"></h2>
+			<h2>Player</h2>
 			
-				<p id="points-player"></p>
-				
-				<section class="cards-container">
-					<img class="cards" id="card-player-1" src="" alt="">
-					<img class="cards" id="card-player-2" src="" alt="">
-					<img class="cards" id="card-player-3" src="" alt="">
-					<img class="cards" id="card-player-4" src="" alt="">
-					<img class="cards" id="card-player-5" src="" alt="">
-					<img class="cards" id="card-player-6" src="" alt="">
-					<img class="cards" id="card-player-7" src="" alt="">
-					<img class="cards" id="card-player-8" src="" alt="">
-					<img class="cards" id="card-player-9" src="" alt="">
-					<img class="cards" id="card-player-10" src="" alt="">
-					<img class="cards" id="card-player-11" src="" alt="">
-					<img class="cards" id="card-player-12" src="" alt="">
-					<img class="cards" id="card-player-13" src="" alt="">
-					<img class="cards" id="card-player-14" src="" alt="">
-					<img class="cards" id="card-player-15" src="" alt="">
-					<img class="cards" id="card-player-16" src="" alt="">
-					<img class="cards" id="card-player-17" src="" alt="">
-					<img class="cards" id="card-player-18" src="" alt="">
-					<img class="cards" id="card-player-19" src="" alt="">
-					<img class="cards" id="card-player-20" src="" alt="">
-					<img class="cards" id="card-player-21" src="" alt="">
+			<section id="game-actions">
+
+				<section id="game-buttons">
+					<button class="hide" id="get-deck">Re-/Start Game</button>
+					<button class="hide" id="hit">Hit</button>
+					<button class="hide" id="stand">Stand</button>
 				</section>
+	
+				<section class="points">
+
+					<section class="bids">
+						<label for="bid" id="place-bid">Place bid: </label>
+						<input type="range" min="50" max="5000" value="50" class="slider" id="bid" name="bid">
+						<p class="hide" id="bid-placed">Bid placed: </p>
+						<p id="bid-value"></p>
+					</section>
+
+					<section class="current">
+						<h4>Current Points:</h4>
+						<p id="current-points"></p>
+					</section>
+
+				</section>
+				
 			</section>
+		
+			<p id="points-player"></p>
+			
+			<section id="cards-container-player" class="cards-container">
+				<img class="cards" id="card-player-1" src="" alt="">
+				<img class="cards" id="card-player-2" src="" alt="">
+				<img class="cards" id="card-player-3" src="" alt="">
+				<img class="cards" id="card-player-4" src="" alt="">
+				<img class="cards" id="card-player-5" src="" alt="">
+				<img class="cards" id="card-player-6" src="" alt="">
+				<img class="cards" id="card-player-7" src="" alt="">
+				<img class="cards" id="card-player-8" src="" alt="">
+				<img class="cards" id="card-player-9" src="" alt="">
+				<img class="cards" id="card-player-10" src="" alt="">
+				<img class="cards" id="card-player-11" src="" alt="">
+				<img class="cards" id="card-player-12" src="" alt="">
+				<img class="cards" id="card-player-13" src="" alt="">
+				<img class="cards" id="card-player-14" src="" alt="">
+				<img class="cards" id="card-player-15" src="" alt="">
+				<img class="cards" id="card-player-16" src="" alt="">
+				<img class="cards" id="card-player-17" src="" alt="">
+				<img class="cards" id="card-player-18" src="" alt="">
+				<img class="cards" id="card-player-19" src="" alt="">
+				<img class="cards" id="card-player-20" src="" alt="">
+				<img class="cards" id="card-player-21" src="" alt="">
+			</section>
+
+		</section>
 
 		<section class="entities" id="bot-dealer">
 			<h2>Dealer</h2>
 			<p id="points-bot"></p>
 
-			<section class="cards-container">
+			<section id="cards-container-bot" class="cards-container">
 				<img class="cards" id="card-bot-1" src="" alt="">
 				<img class="cards" id="card-bot-2" src="" alt="">
 				<img class="cards" id="card-bot-3" src="" alt="">
@@ -182,9 +104,18 @@
 				<img class="cards" id="card-bot-20" src="" alt="">
 				<img class="cards" id="card-bot-21" src="" alt="">
 			</section>
+
 		</section>
 	</main>
 
+	<section class="hide" id="out-of-money">
+		<section id="balance-too-low">
+			<h4>Current balance: </h4>
+			<p id="balance"></p>
+		</section>
+		<h2>Your balance is too low.</h2>
+		<h3>Wait untill the evenet is over</h3>
+	</section>
+
 		<script type="text/javascript" src="js/main.js"></script>
 	</body>
-</html>
