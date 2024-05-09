@@ -489,7 +489,8 @@ async function checkBalance(){
 					dom.main.classList.add("hide");
 					dom.outOfMoney.classList.remove("hide");
 					dom.balanceTooSmall.innerText = localStorage.getItem("balance");
-
+					dom.highscoreAfter.innerText = localStorage.getItem("highscore");
+					document.querySelector("#submit-highscore").classList.remove("hide")
 				}
 		});
 	}
