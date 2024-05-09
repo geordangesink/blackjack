@@ -111,6 +111,7 @@ async function pageLoad(){
 	else{
         document.querySelector("#submit-highscore").classList.add("hide")
 		dom.bidValue.innerHTML = localStorage.getItem("bid");
+		dom.newRound.classList.remove("hide");
 	}
 }
 
