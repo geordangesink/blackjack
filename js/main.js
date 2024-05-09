@@ -72,6 +72,9 @@ async function pageLoad(){
 	await checkBalance();
 
 	if ( localStorage.getItem("playerCardsImage") ){
+		document.submitform.highscoresubmit.value = localStorage.getItem("highscore");
+		document.querySelector("#submit-highscore").classList.remove("hide")
+		dom.highscore.innerText = localStorage.getItem("highscore");
 		let playerCards = localStorage.getItem("playerCardsImage").split(",");
 		let botCards = localStorage.getItem("botCardsImage").split(",");
 
