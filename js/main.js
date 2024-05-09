@@ -31,6 +31,7 @@ const dom = {
 	highscoreAfter: document.querySelector("#highscore-after"),
 
     // Buttons
+	submit: document.querySelector("#submit"),
     newRound: document.querySelector("#get-deck"),
     hit: document.querySelector("#hit"),
     stnd: document.querySelector("#stand"),
@@ -124,10 +125,11 @@ async function pageLoad(){
 dom.bid.max = localStorage.getItem("balance");
 dom.bid.oninput = function() {
 	dom.bidValue.innerHTML = this.value;
+	dom.bidValueInput.value = this.value;
 }
-// dom.bidValueInput.oninput = function() {
-// 	dom.bid.value = this.value;
-// }
+dom.bidValueInput.oninput = function() {
+	dom.bid.value = this.value;
+}
 dom.balance.innerText = localStorage.getItem("balance");
 
 function startGame()
@@ -474,7 +476,7 @@ async function end(statement, refresh)
 
 async function checkBalance(){
 	if (Number(localStorage.getItem("balance")) < Number(dom.bid.min)){
-		await new Promise(resolve => setTimeout(resolve, 2500))
+		await new Promise(resolve => setTimeout(resolve, 2000))
 
 		const options = {
 			method : "GET"
