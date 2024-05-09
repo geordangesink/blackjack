@@ -80,6 +80,10 @@ header {
     border-radius: 4px;
   }
 
+    #winner{
+      margin-top: 0;
+    }
+
 .entities > h2{
   font-size: 1rem;
 }
@@ -135,6 +139,31 @@ header {
 
 #balance-too-low > p{
   margin: 0 5px;
+}
+
+#form{
+  margin-top: 50px;
+}
+
+#form .actions{
+	display: flex;
+	justify-content: space-around;
+}
+
+#form .fields input, #form .actions *{
+	background-color: #3B3E45;
+  color: white;
+}
+
+#form .fields label{
+	color: #bcbcbc;
+}
+
+#highscore, #highscore-label{
+  margin: 10px 0 0 0;
+}
+#submit-highscore{
+  margin-top: 10px;
 }
 
 footer {
