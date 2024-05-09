@@ -49,6 +49,10 @@ const dom = {
 }
 
 // Button actions
+dom.submit.addEventListener("click", function(element){
+	element.preventDefault();
+	nameSubmited()
+});
 dom.bidSelect.addEventListener("click", function(){
 	selectBid();
 	localStorage.setItem("refresh", "false");
