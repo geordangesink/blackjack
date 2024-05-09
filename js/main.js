@@ -10,27 +10,22 @@ var cardsLeftInDeck = 0;
 const dom = {
     // Sections
     main: document.querySelector("#main"),
-	form: document.querySelector("#form"),
     outOfMoney: document.querySelector("#out-of-money"),
 
 
     // Texts
     bidLabel: document.querySelector("#place-bid"),
     bidValue: document.querySelector("#bid-value"),
+	bidValueInput: document.querySelector("#bid-value-input"),
+	bidSelect: document.querySelector("#select-bid"),
     bidValueLabel: document.querySelector("#bid-placed"),
     pointsBot: document.querySelector("#points-bot"),
     pointsPlayer: document.querySelector("#points-player"),
     result: document.querySelector("#winner"),
     balance: document.querySelector("#current-points"),
     balanceTooSmall : document.querySelector("#balance"),
-	name: document.querySelector("#name"),
-	username: document.querySelector("#username"),
-	highscoreSubmit: document.querySelector("highscore-submit"),
-	highscore: document.querySelector("#highscore"),
-	highscoreAfter: document.querySelector("#highscore-after"),
 
     // Buttons
-	submit: document.querySelector("#submit"),
     newRound: document.querySelector("#get-deck"),
     hit: document.querySelector("#hit"),
     stnd: document.querySelector("#stand"),
@@ -49,9 +44,9 @@ const dom = {
 }
 
 // Button actions
-dom.submit.addEventListener("click", function(element){
-	element.preventDefault();
-	nameSubmited()
+dom.bidSelect.addEventListener("click", function(){
+	selectBid();
+	localStorage.setItem("refresh", "false");
 });
 dom.newRound.addEventListener("click", function(){
     startGame();
@@ -68,15 +63,10 @@ dom.stnd.addEventListener("click", function(){
 
 pageLoad();
 async function pageLoad(){
-
-	await checkBalance();
-	
 	// Relode unfinished game if there is one in local storage
+	await checkBalance();
+
 	if ( localStorage.getItem("playerCardsImage") ){
-		document.submitform.username.value = localStorage.getItem("username");
-		document.submitform.highscoresubmit.value = localStorage.getItem("highscore");
-		document.querySelector("#submit-highscore").classList.remove("hide")
-		dom.highscore.innerText = localStorage.getItem("highscore");
 		let playerCards = localStorage.getItem("playerCardsImage").split(",");
 		let botCards = localStorage.getItem("botCardsImage").split(",");
 
@@ -93,10 +83,12 @@ async function pageLoad(){
 		}
 		else{
 			// bid GUI
-			dom.bidValue.innerHTML = localStorage.getItem("bid");
+			dom.bidValue.innerText = localStorage.getItem("bid");
 			dom.bidValueLabel.classList.remove("hide");
 			dom.bid.classList.add("hide");
 			dom.bidLabel.classList.add("hide");
+			dom.bidValueInput.classList.add("hide");
+			dom.bidSelect.classList.add("hide");
 
 			dom.cardBot(1).src = cardBackSideImage;
 			dom.cardBot(2).src = botCards[1];
@@ -108,17 +100,20 @@ async function pageLoad(){
 		}
 	}
 	else{
-		document.querySelector("#submit-highscore").classList.add("hide")
-		dom.newRound.classList.remove("hide");
+        bidNotPlaced();
+		dom.bidValue.innerHTML = localStorage.getItem("bid");
 	}
 }
 
 
 // slider config
-dom.bid.max = localStorage.getItem("balance")
+dom.bid.max = localStorage.getItem("balance");
 dom.bid.oninput = function() {
 	dom.bidValue.innerHTML = this.value;
 }
+// dom.bidValueInput.oninput = function() {
+// 	dom.bid.value = this.value;
+// }
 dom.balance.innerText = localStorage.getItem("balance");
 
 function startGame()
@@ -211,7 +206,7 @@ function startGame()
 
 }
 
-async function newDeck()
+function newDeck()
 {
     const url = "https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=6";
 	const options = {
@@ -219,7 +214,6 @@ async function newDeck()
     };
 
 	localStorage.setItem("balance", "5000");
-	localStorage.setItem("highscore", localStorage.getItem("balance"))
 	dom.balance.innerText = localStorage.getItem("balance");
 	dom.bid.max = localStorage.getItem("balance")
 
@@ -236,7 +230,7 @@ async function newDeck()
 					document.querySelector("#error").innerText = `Problems fetching card deck from API server \n-> ${err}`;
 				});
 			
-	dom.newRound.classList.remove("hide");
+	document.querySelector("#get-deck").classList.remove("hide");
 }
 
 async function drawCard(entity, image, value)
@@ -410,7 +404,6 @@ async function end(statement, refresh)
 			dom.newRound.classList.remove("hide");
 			if (localStorage.getItem("refresh") != "true"){
 				localStorage.setItem("balance", Math.round(Number(localStorage.getItem("balance")) + Number(localStorage.getItem("bid")) + Number(localStorage.getItem("bid"))/2));
-				win();
 			}
 			localStorage.setItem("refresh", "true")
 			break;
@@ -420,7 +413,6 @@ async function end(statement, refresh)
 			dom.newRound.classList.remove("hide");
 			if (localStorage.getItem("refresh") != "true"){
 				localStorage.setItem("balance", Math.round(Number(localStorage.getItem("balance")) + Number(localStorage.getItem("bid"))));
-				win();
 			}
 			localStorage.setItem("refresh", "true")
 			break;
@@ -430,7 +422,6 @@ async function end(statement, refresh)
 			dom.newRound.classList.remove("hide");
 			if (localStorage.getItem("refresh") != "true"){
 				localStorage.setItem("balance", Math.round(Number(localStorage.getItem("balance")) + Number(localStorage.getItem("bid"))));
-				win();
 			}
 			localStorage.setItem("refresh", "true")
 			break;
@@ -450,8 +441,12 @@ async function end(statement, refresh)
 			localStorage.setItem("refresh", "true")
 			break;
 	}
-	dom.bid.value = dom.bid.min;
-	dom.bidValue.innerText = dom.bid.min;
+	let nextBid = function(){
+		return localStorage.getItem("bid") > localStorage.getItem("balance") ? localStorage.getItem("balance") : localStorage.getItem("bid");
+	}
+	dom.bid.value = nextBid();
+	dom.bidValue.innerText = nextBid();
+		
 	dom.balance.innerText = localStorage.getItem("balance")
 	dom.bid.max = localStorage.getItem("balance");
 
@@ -460,7 +455,7 @@ async function end(statement, refresh)
 
 async function checkBalance(){
 	if (Number(localStorage.getItem("balance")) < Number(dom.bid.min)){
-		await new Promise(resolve => setTimeout(resolve, 1500))
+		await new Promise(resolve => setTimeout(resolve, 2500))
 
 		const options = {
 			method : "GET"
@@ -473,15 +468,16 @@ async function checkBalance(){
 				// If there is no deck with stored ID
 				if (data.success === false){
 					localStorage.clear();
-					dom.form.classList.remove("hide");
+					console.log("Missing deck, creating new one ...")
+					newDeck();
+					dom.main.classList.remove("hide");
+					dom.outOfMoney.classList.add("hide");
 				}
 				else{
-					// adjust UI
 					dom.main.classList.add("hide");
 					dom.outOfMoney.classList.remove("hide");
 					dom.balanceTooSmall.innerText = localStorage.getItem("balance");
-					dom.highscoreAfter.innerText = localStorage.getItem("highscore");
-					document.querySelector("#submit-highscore").classList.remove("hide")
+
 				}
 		});
 	}
@@ -492,14 +488,19 @@ async function checkBalance(){
 	}
 }
 
-function win()
-{
-	if ( Number(localStorage.getItem("balance")) > Number(localStorage.getItem("highscore")) ){
-		localStorage.setItem("highscore", localStorage.getItem("balance"))
+function selectBid(){
+	if ( Number(dom.bidValueInput.value) < Number(dom.bid.min) ){
+		dom.bid.value = dom.bid.min;
+		dom.bidValue.innerText = dom.bid.min;
 	}
-	dom.highscore.innerText = localStorage.getItem("highscore");
-	document.submitform.username.value = localStorage.getItem("username");
-	document.submitform.highscoresubmit.value = localStorage.getItem("highscore");
+	else if ( Number(dom.bidValueInput.value) <= Number(localStorage.getItem("balance")) ){
+		dom.bid.value = dom.bidValueInput.value;
+		dom.bidValue.innerText = dom.bidValueInput.value;
+	}
+	else{
+		dom.bid.value = localStorage.getItem("balance");
+		dom.bidValue.innerText = localStorage.getItem("balance");
+	}
 }
 
 // Adjust UI
@@ -509,6 +510,8 @@ function bidPlaced()
     dom.bidValueLabel.classList.remove("hide");
 	dom.bid.classList.add("hide");
 	dom.bidLabel.classList.add("hide");
+	dom.bidValueInput.classList.add("hide");
+	dom.bidSelect.classList.add("hide");
 
     // adjust game-core-related UI
     dom.newRound.classList.add("hide");
@@ -524,22 +527,11 @@ function bidNotPlaced()
     dom.bidValueLabel.classList.add("hide");
 	dom.bid.classList.remove("hide");
 	dom.bidLabel.classList.remove("hide");
+	dom.bidValueInput.classList.remove("hide");
+	dom.bidSelect.classList.remove("hide");
 
     // adjust game-core-related UI
     dom.newRound.classList.remove("hide");
     dom.hit.classList.add("hide");
 	dom.stnd.classList.add("hide");
-}
-
-async function nameSubmited()
-{
-	localStorage.setItem("username", dom.name.value)
-	dom.form.classList.add("hide");
-	dom.main.classList.remove("hide");
-	dom.outOfMoney.classList.add("hide");
-	localStorage.setItem("submit", "true");
-	await newDeck();
-	bidNotPlaced();
-	dom.bidValue.innerHTML = localStorage.getItem("bid");
-	document.querySelector("#submit-highscore").classList.remove("hide")
 }
