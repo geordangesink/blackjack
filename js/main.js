@@ -11,7 +11,6 @@ const dom = {
     // Sections
     main: document.querySelector("#main"),
 	form: document.querySelector("#form"),
-	submitForm: document.querySelector("#submit-form"),
     outOfMoney: document.querySelector("#out-of-money"),
 
 
@@ -50,8 +49,6 @@ const dom = {
 }
 
 // Button actions
-document.querySelector("#submit-highscore").addEventListener("click", submitHighscore);
-
 dom.submit.addEventListener("click", function(element){
 	element.preventDefault();
 	nameSubmited()
@@ -76,6 +73,8 @@ async function pageLoad(){
 	
 	// Relode unfinished game if there is one in local storage
 	if ( localStorage.getItem("playerCardsImage") ){
+		document.submitform.username.value = localStorage.getItem("username");
+		document.submitform.highscoresubmit.value = localStorage.getItem("highscore");
 		document.querySelector("#submit-highscore").classList.remove("hide")
 		dom.highscore.innerText = localStorage.getItem("highscore");
 		let playerCards = localStorage.getItem("playerCardsImage").split(",");
@@ -482,6 +481,7 @@ async function checkBalance(){
 					dom.outOfMoney.classList.remove("hide");
 					dom.balanceTooSmall.innerText = localStorage.getItem("balance");
 					dom.highscoreAfter.innerText = localStorage.getItem("highscore");
+					document.querySelector("#submit-highscore").classList.remove("hide")
 				}
 		});
 	}
@@ -498,12 +498,8 @@ function win()
 		localStorage.setItem("highscore", localStorage.getItem("balance"))
 	}
 	dom.highscore.innerText = localStorage.getItem("highscore");
-}
-
-function submitHighscore(){
-	dom.highscoreSubmit.value = localStorage.getItem("highscore");
-	dom.username.value = localStorage.getItem("username");
-	document.querySelector("#submit-form").submit();
+	document.submitform.username.value = localStorage.getItem("username");
+	document.submitform.highscoresubmit.value = localStorage.getItem("highscore");
 }
 
 // Adjust UI
