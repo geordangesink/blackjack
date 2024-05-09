@@ -9,6 +9,7 @@ var cardsLeftInDeck = 0;
 
 const dom = {
     // Sections
+	form: document.querySelector("#form"),
     main: document.querySelector("#main"),
     outOfMoney: document.querySelector("#out-of-money"),
 
@@ -114,6 +115,8 @@ async function pageLoad(){
 		}
 	}
 	else{
+		dom.main.classList.add("hide");
+		dom.form.classList.remove("hide");
         document.querySelector("#submit-highscore").classList.add("hide")
 		dom.bidValue.innerHTML = localStorage.getItem("bid");
 		dom.newRound.classList.remove("hide");
@@ -222,7 +225,7 @@ function startGame()
 
 }
 
-function newDeck()
+async function newDeck()
 {
     const url = "https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=6";
 	const options = {
