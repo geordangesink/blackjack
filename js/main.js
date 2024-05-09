@@ -224,8 +224,10 @@ function newDeck()
     };
 
 	localStorage.setItem("balance", "5000");
+	localStorage.setItem("highscore", localStorage.getItem("balance"));
+	dom.highscore.innerText = localStorage.getItem("highscore");
 	dom.balance.innerText = localStorage.getItem("balance");
-	dom.bid.max = localStorage.getItem("balance")
+	dom.bid.max = localStorage.getItem("balance");
 
 	// Create a new deck
 	fetch(url, options)
