@@ -77,7 +77,7 @@ async function pageLoad(){
 		}
 		else{
 			// bid GUI
-			dom.bidValue.innerHTML = localStorage.getItem("bid");
+			dom.bidValue.value = localStorage.getItem("bid");
 			dom.bidValueLabel.classList.remove("hide");
 			dom.bid.classList.add("hide");
 			dom.bidLabel.classList.add("hide");
@@ -93,15 +93,16 @@ async function pageLoad(){
 	}
 	else{
         bidNotPlaced();
-		dom.bidValue.innerHTML = localStorage.getItem("bid");
+		dom.bidValue.value = localStorage.getItem("bid");
 	}
 }
 
 
 // slider config
 dom.bid.max = localStorage.getItem("balance")
+dom.bidValue.max = localStorage.getItem("balance")
 dom.bid.oninput = function() {
-	dom.bidValue.innerHTML = this.value;
+dom.bidValue.value = this.value;
 }
 dom.balance.innerText = localStorage.getItem("balance");
 
@@ -205,6 +206,7 @@ function newDeck()
 	localStorage.setItem("balance", "5000");
 	dom.balance.innerText = localStorage.getItem("balance");
 	dom.bid.max = localStorage.getItem("balance")
+	dom.bidValue.max = localStorage.getItem("balance")
 
 	// Create a new deck
 	fetch(url, options)
@@ -431,9 +433,10 @@ async function end(statement, refresh)
 			break;
 	}
 	dom.bid.value = dom.bid.min;
-	dom.bidValue.innerText = dom.bid.min;
-	dom.balance.innerText = localStorage.getItem("balance")
+	dom.bidValue.value = dom.bid.min;
+	dom.balance.innerText = localStorage.getItem("balance");
 	dom.bid.max = localStorage.getItem("balance");
+	dom.bidValue.max = localStorage.getItem("balance");
 
 	checkBalance()
 }
