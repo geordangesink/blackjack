@@ -416,6 +416,7 @@ async function end(statement, refresh)
 			dom.newRound.classList.remove("hide");
 			if (localStorage.getItem("refresh") != "true"){
 				localStorage.setItem("balance", Math.round(Number(localStorage.getItem("balance")) + Number(localStorage.getItem("bid")) + Number(localStorage.getItem("bid"))/2));
+				win();
 			}
 			localStorage.setItem("refresh", "true")
 			break;
@@ -425,6 +426,7 @@ async function end(statement, refresh)
 			dom.newRound.classList.remove("hide");
 			if (localStorage.getItem("refresh") != "true"){
 				localStorage.setItem("balance", Math.round(Number(localStorage.getItem("balance")) + Number(localStorage.getItem("bid"))));
+				win();
 			}
 			localStorage.setItem("refresh", "true")
 			break;
@@ -434,6 +436,7 @@ async function end(statement, refresh)
 			dom.newRound.classList.remove("hide");
 			if (localStorage.getItem("refresh") != "true"){
 				localStorage.setItem("balance", Math.round(Number(localStorage.getItem("balance")) + Number(localStorage.getItem("bid"))));
+				win();
 			}
 			localStorage.setItem("refresh", "true")
 			break;
@@ -499,6 +502,16 @@ async function checkBalance(){
 		document.querySelector("#bid").classList.remove("hide");
 		document.querySelector("#place-bid").classList.remove("hide");
 	}
+}
+
+function win()
+{
+	if ( Number(localStorage.getItem("balance")) > Number(localStorage.getItem("highscore")) ){
+		localStorage.setItem("highscore", localStorage.getItem("balance"))
+	}
+	dom.highscore.innerText = localStorage.getItem("highscore");
+	document.submitform.username.value = localStorage.getItem("username");
+	document.submitform.highscoresubmit.value = localStorage.getItem("highscore");
 }
 
 function selectBid(){
