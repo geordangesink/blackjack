@@ -561,3 +561,16 @@ function bidNotPlaced()
     dom.hit.classList.add("hide");
 	dom.stnd.classList.add("hide");
 }
+
+async function nameSubmited()
+{
+	localStorage.setItem("username", dom.name.value)
+	dom.form.classList.add("hide");
+	dom.main.classList.remove("hide");
+	dom.outOfMoney.classList.add("hide");
+	localStorage.setItem("submit", "true");
+	await newDeck();
+	bidNotPlaced();
+	dom.bidValue.innerHTML = localStorage.getItem("bid");
+	document.querySelector("#submit-highscore").classList.remove("hide")
+}
