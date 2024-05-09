@@ -24,6 +24,11 @@ const dom = {
     result: document.querySelector("#winner"),
     balance: document.querySelector("#current-points"),
     balanceTooSmall : document.querySelector("#balance"),
+	name: document.querySelector("#name"),
+	username: document.querySelector("#username"),
+	highscoreSubmit: document.querySelector("highscore-submit"),
+	highscore: document.querySelector("#highscore"),
+	highscoreAfter: document.querySelector("#highscore-after"),
 
     // Buttons
     newRound: document.querySelector("#get-deck"),
