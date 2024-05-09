@@ -109,7 +109,7 @@ async function pageLoad(){
 		}
 	}
 	else{
-        bidNotPlaced();
+        document.querySelector("#submit-highscore").classList.add("hide")
 		dom.bidValue.innerHTML = localStorage.getItem("bid");
 	}
 }
