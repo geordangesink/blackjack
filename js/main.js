@@ -88,11 +88,7 @@ async function pageLoad(){
 		}
 		else{
 			// bid GUI
-<<<<<<< HEAD
-			dom.bidValue.value = localStorage.getItem("bid");
-=======
 			dom.bidValue.innerText = localStorage.getItem("bid");
->>>>>>> 1.4
 			dom.bidValueLabel.classList.remove("hide");
 			dom.bid.classList.add("hide");
 			dom.bidLabel.classList.add("hide");
@@ -109,35 +105,16 @@ async function pageLoad(){
 		}
 	}
 	else{
-<<<<<<< Updated upstream
-<<<<<<< HEAD
-        bidNotPlaced();
-		dom.bidValue.value = localStorage.getItem("bid");
-=======
-		dom.main.classList.add("hide");
-		dom.form.classList.remove("hide");
-        document.querySelector("#submit-highscore").classList.add("hide")
-		dom.bidValue.innerHTML = localStorage.getItem("bid");
-		dom.newRound.classList.remove("hide");
->>>>>>> 1.4
-=======
 		newDeck();
 		dom.main.classList.remove("hide");
 		dom.outOfMoney.classList.add("hide");
 		bidNotPlaced();
 		dom.bidValue.innerHTML = localStorage.getItem("bid");
->>>>>>> Stashed changes
 	}
 }
 
 
 // slider config
-<<<<<<< HEAD
-dom.bid.max = localStorage.getItem("balance")
-dom.bidValue.max = localStorage.getItem("balance")
-dom.bid.oninput = function() {
-dom.bidValue.value = this.value;
-=======
 dom.bid.max = localStorage.getItem("balance");
 dom.bid.oninput = function() {
 	dom.bidValue.innerHTML = this.value;
@@ -145,7 +122,6 @@ dom.bid.oninput = function() {
 }
 dom.bidValueInput.oninput = function() {
 	dom.bid.value = this.value;
->>>>>>> 1.4
 }
 dom.balance.innerText = localStorage.getItem("balance");
 
@@ -254,12 +230,7 @@ async function newDeck()
 	localStorage.setItem("highscore", localStorage.getItem("balance"));
 	dom.highscore.innerText = localStorage.getItem("highscore");
 	dom.balance.innerText = localStorage.getItem("balance");
-<<<<<<< HEAD
-	dom.bid.max = localStorage.getItem("balance")
-	dom.bidValue.max = localStorage.getItem("balance")
-=======
 	dom.bid.max = localStorage.getItem("balance");
->>>>>>> 1.4
 
 	// Create a new deck
 	fetch(url, options)
@@ -494,27 +465,12 @@ async function end(statement, refresh)
 			localStorage.setItem("refresh", "true")
 			break;
 	}
-<<<<<<< Updated upstream
-<<<<<<< HEAD
-	dom.bid.value = dom.bid.min;
-	dom.bidValue.value = dom.bid.min;
-	dom.balance.innerText = localStorage.getItem("balance");
-=======
-	let nextBid = function(){
-		return localStorage.getItem("bid") > localStorage.getItem("balance") ? localStorage.getItem("balance") : localStorage.getItem("bid");
-	}
-	dom.bid.value = nextBid();
-	dom.bidValue.innerText = nextBid();
-=======
 	dom.bid.value = nextBid;
 	dom.bidValue.innerText = nextBid;
 	dom.bidValueInput.value = nextBid;
->>>>>>> Stashed changes
 		
 	dom.balance.innerText = localStorage.getItem("balance")
->>>>>>> 1.4
 	dom.bid.max = localStorage.getItem("balance");
-	dom.bidValue.max = localStorage.getItem("balance");
 
 	checkBalance()
 }
