@@ -9,6 +9,7 @@ var cardsLeftInDeck = 0;
 
 const dom = {
     // Sections
+	form: document.querySelector("#form"),
     main: document.querySelector("#main"),
     outOfMoney: document.querySelector("#out-of-money"),
 
@@ -16,14 +17,22 @@ const dom = {
     // Texts
     bidLabel: document.querySelector("#place-bid"),
     bidValue: document.querySelector("#bid-value"),
+	bidValueInput: document.querySelector("#bid-value-input"),
+	bidSelect: document.querySelector("#select-bid"),
     bidValueLabel: document.querySelector("#bid-placed"),
     pointsBot: document.querySelector("#points-bot"),
     pointsPlayer: document.querySelector("#points-player"),
     result: document.querySelector("#winner"),
     balance: document.querySelector("#current-points"),
     balanceTooSmall : document.querySelector("#balance"),
+	name: document.querySelector("#name"),
+	username: document.querySelector("#username"),
+	highscoreSubmit: document.querySelector("highscore-submit"),
+	highscore: document.querySelector("#highscore"),
+	highscoreAfter: document.querySelector("#highscore-after"),
 
     // Buttons
+	submit: document.querySelector("#submit"),
     newRound: document.querySelector("#get-deck"),
     hit: document.querySelector("#hit"),
     stnd: document.querySelector("#stand"),
@@ -42,6 +51,14 @@ const dom = {
 }
 
 // Button actions
+dom.submit.addEventListener("click", function(element){
+	element.preventDefault();
+	nameSubmited()
+});
+dom.bidSelect.addEventListener("click", function(){
+	selectBid();
+	localStorage.setItem("refresh", "false");
+});
 dom.newRound.addEventListener("click", function(){
     startGame();
     localStorage.setItem("refresh", "false");
@@ -61,6 +78,10 @@ async function pageLoad(){
 	await checkBalance();
 
 	if ( localStorage.getItem("playerCardsImage") ){
+		document.submitform.username.value = localStorage.getItem("username");
+		document.submitform.highscoresubmit.value = localStorage.getItem("highscore");
+		document.querySelector("#submit-highscore").classList.remove("hide")
+		dom.highscore.innerText = localStorage.getItem("highscore");
 		let playerCards = localStorage.getItem("playerCardsImage").split(",");
 		let botCards = localStorage.getItem("botCardsImage").split(",");
 
@@ -77,10 +98,16 @@ async function pageLoad(){
 		}
 		else{
 			// bid GUI
+<<<<<<< HEAD
 			dom.bidValue.value = localStorage.getItem("bid");
+=======
+			dom.bidValue.innerText = localStorage.getItem("bid");
+>>>>>>> 1.4
 			dom.bidValueLabel.classList.remove("hide");
 			dom.bid.classList.add("hide");
 			dom.bidLabel.classList.add("hide");
+			dom.bidValueInput.classList.add("hide");
+			dom.bidSelect.classList.add("hide");
 
 			dom.cardBot(1).src = cardBackSideImage;
 			dom.cardBot(2).src = botCards[1];
@@ -92,17 +119,35 @@ async function pageLoad(){
 		}
 	}
 	else{
+<<<<<<< HEAD
         bidNotPlaced();
 		dom.bidValue.value = localStorage.getItem("bid");
+=======
+		dom.main.classList.add("hide");
+		dom.form.classList.remove("hide");
+        document.querySelector("#submit-highscore").classList.add("hide")
+		dom.bidValue.innerHTML = localStorage.getItem("bid");
+		dom.newRound.classList.remove("hide");
+>>>>>>> 1.4
 	}
 }
 
 
 // slider config
+<<<<<<< HEAD
 dom.bid.max = localStorage.getItem("balance")
 dom.bidValue.max = localStorage.getItem("balance")
 dom.bid.oninput = function() {
 dom.bidValue.value = this.value;
+=======
+dom.bid.max = localStorage.getItem("balance");
+dom.bid.oninput = function() {
+	dom.bidValue.innerHTML = this.value;
+	dom.bidValueInput.value = this.value;
+}
+dom.bidValueInput.oninput = function() {
+	dom.bid.value = this.value;
+>>>>>>> 1.4
 }
 dom.balance.innerText = localStorage.getItem("balance");
 
@@ -196,7 +241,7 @@ function startGame()
 
 }
 
-function newDeck()
+async function newDeck()
 {
     const url = "https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=6";
 	const options = {
@@ -204,9 +249,15 @@ function newDeck()
     };
 
 	localStorage.setItem("balance", "5000");
+	localStorage.setItem("highscore", localStorage.getItem("balance"));
+	dom.highscore.innerText = localStorage.getItem("highscore");
 	dom.balance.innerText = localStorage.getItem("balance");
+<<<<<<< HEAD
 	dom.bid.max = localStorage.getItem("balance")
 	dom.bidValue.max = localStorage.getItem("balance")
+=======
+	dom.bid.max = localStorage.getItem("balance");
+>>>>>>> 1.4
 
 	// Create a new deck
 	fetch(url, options)
@@ -395,6 +446,7 @@ async function end(statement, refresh)
 			dom.newRound.classList.remove("hide");
 			if (localStorage.getItem("refresh") != "true"){
 				localStorage.setItem("balance", Math.round(Number(localStorage.getItem("balance")) + Number(localStorage.getItem("bid")) + Number(localStorage.getItem("bid"))/2));
+				win();
 			}
 			localStorage.setItem("refresh", "true")
 			break;
@@ -404,6 +456,7 @@ async function end(statement, refresh)
 			dom.newRound.classList.remove("hide");
 			if (localStorage.getItem("refresh") != "true"){
 				localStorage.setItem("balance", Math.round(Number(localStorage.getItem("balance")) + Number(localStorage.getItem("bid"))));
+				win();
 			}
 			localStorage.setItem("refresh", "true")
 			break;
@@ -413,6 +466,7 @@ async function end(statement, refresh)
 			dom.newRound.classList.remove("hide");
 			if (localStorage.getItem("refresh") != "true"){
 				localStorage.setItem("balance", Math.round(Number(localStorage.getItem("balance")) + Number(localStorage.getItem("bid"))));
+				win();
 			}
 			localStorage.setItem("refresh", "true")
 			break;
@@ -432,9 +486,19 @@ async function end(statement, refresh)
 			localStorage.setItem("refresh", "true")
 			break;
 	}
+<<<<<<< HEAD
 	dom.bid.value = dom.bid.min;
 	dom.bidValue.value = dom.bid.min;
 	dom.balance.innerText = localStorage.getItem("balance");
+=======
+	let nextBid = function(){
+		return localStorage.getItem("bid") > localStorage.getItem("balance") ? localStorage.getItem("balance") : localStorage.getItem("bid");
+	}
+	dom.bid.value = nextBid();
+	dom.bidValue.innerText = nextBid();
+		
+	dom.balance.innerText = localStorage.getItem("balance")
+>>>>>>> 1.4
 	dom.bid.max = localStorage.getItem("balance");
 	dom.bidValue.max = localStorage.getItem("balance");
 
@@ -443,7 +507,7 @@ async function end(statement, refresh)
 
 async function checkBalance(){
 	if (Number(localStorage.getItem("balance")) < Number(dom.bid.min)){
-		await new Promise(resolve => setTimeout(resolve, 2500))
+		await new Promise(resolve => setTimeout(resolve, 2000))
 
 		const options = {
 			method : "GET"
@@ -465,7 +529,8 @@ async function checkBalance(){
 					dom.main.classList.add("hide");
 					dom.outOfMoney.classList.remove("hide");
 					dom.balanceTooSmall.innerText = localStorage.getItem("balance");
-
+					dom.highscoreAfter.innerText = localStorage.getItem("highscore");
+					document.querySelector("#submit-highscore").classList.remove("hide")
 				}
 		});
 	}
@@ -476,6 +541,31 @@ async function checkBalance(){
 	}
 }
 
+function win()
+{
+	if ( Number(localStorage.getItem("balance")) > Number(localStorage.getItem("highscore")) ){
+		localStorage.setItem("highscore", localStorage.getItem("balance"))
+	}
+	dom.highscore.innerText = localStorage.getItem("highscore");
+	document.submitform.username.value = localStorage.getItem("username");
+	document.submitform.highscoresubmit.value = localStorage.getItem("highscore");
+}
+
+function selectBid(){
+	if ( Number(dom.bidValueInput.value) < Number(dom.bid.min) ){
+		dom.bid.value = dom.bid.min;
+		dom.bidValue.innerText = dom.bid.min;
+	}
+	else if ( Number(dom.bidValueInput.value) <= Number(localStorage.getItem("balance")) ){
+		dom.bid.value = dom.bidValueInput.value;
+		dom.bidValue.innerText = dom.bidValueInput.value;
+	}
+	else{
+		dom.bid.value = localStorage.getItem("balance");
+		dom.bidValue.innerText = localStorage.getItem("balance");
+	}
+}
+
 // Adjust UI
 function bidPlaced()
 {
@@ -483,6 +573,8 @@ function bidPlaced()
     dom.bidValueLabel.classList.remove("hide");
 	dom.bid.classList.add("hide");
 	dom.bidLabel.classList.add("hide");
+	dom.bidValueInput.classList.add("hide");
+	dom.bidSelect.classList.add("hide");
 
     // adjust game-core-related UI
     dom.newRound.classList.add("hide");
@@ -498,9 +590,24 @@ function bidNotPlaced()
     dom.bidValueLabel.classList.add("hide");
 	dom.bid.classList.remove("hide");
 	dom.bidLabel.classList.remove("hide");
+	dom.bidValueInput.classList.remove("hide");
+	dom.bidSelect.classList.remove("hide");
 
     // adjust game-core-related UI
     dom.newRound.classList.remove("hide");
     dom.hit.classList.add("hide");
 	dom.stnd.classList.add("hide");
+}
+
+async function nameSubmited()
+{
+	localStorage.setItem("username", dom.name.value)
+	dom.form.classList.add("hide");
+	dom.main.classList.remove("hide");
+	dom.outOfMoney.classList.add("hide");
+	localStorage.setItem("submit", "true");
+	await newDeck();
+	bidNotPlaced();
+	dom.bidValue.innerHTML = localStorage.getItem("bid");
+	document.querySelector("#submit-highscore").classList.remove("hide")
 }
