@@ -1,4 +1,5 @@
 const cardBackSideImage = "https://www.deckofcardsapi.com/static/img/back.png";
+const bidMin = 50;
 
 // Arrays for fetched elements
 var botCardImages = new Array();
@@ -25,14 +26,10 @@ const dom = {
     result: document.querySelector("#winner"),
     balance: document.querySelector("#current-points"),
     balanceTooSmall : document.querySelector("#balance"),
-	name: document.querySelector("#name"),
-	username: document.querySelector("#username"),
-	highscoreSubmit: document.querySelector("highscore-submit"),
 	highscore: document.querySelector("#highscore"),
 	highscoreAfter: document.querySelector("#highscore-after"),
 
     // Buttons
-	submit: document.querySelector("#submit"),
     newRound: document.querySelector("#get-deck"),
     hit: document.querySelector("#hit"),
     stnd: document.querySelector("#stand"),
@@ -51,10 +48,6 @@ const dom = {
 }
 
 // Button actions
-dom.submit.addEventListener("click", function(element){
-	element.preventDefault();
-	nameSubmited()
-});
 dom.bidSelect.addEventListener("click", function(){
 	selectBid();
 	localStorage.setItem("refresh", "false");
@@ -78,9 +71,6 @@ async function pageLoad(){
 	await checkBalance();
 
 	if ( localStorage.getItem("playerCardsImage") ){
-		document.submitform.username.value = localStorage.getItem("username");
-		document.submitform.highscoresubmit.value = localStorage.getItem("highscore");
-		document.querySelector("#submit-highscore").classList.remove("hide")
 		dom.highscore.innerText = localStorage.getItem("highscore");
 		let playerCards = localStorage.getItem("playerCardsImage").split(",");
 		let botCards = localStorage.getItem("botCardsImage").split(",");
@@ -119,6 +109,7 @@ async function pageLoad(){
 		}
 	}
 	else{
+<<<<<<< Updated upstream
 <<<<<<< HEAD
         bidNotPlaced();
 		dom.bidValue.value = localStorage.getItem("bid");
@@ -129,6 +120,13 @@ async function pageLoad(){
 		dom.bidValue.innerHTML = localStorage.getItem("bid");
 		dom.newRound.classList.remove("hide");
 >>>>>>> 1.4
+=======
+		newDeck();
+		dom.main.classList.remove("hide");
+		dom.outOfMoney.classList.add("hide");
+		bidNotPlaced();
+		dom.bidValue.innerHTML = localStorage.getItem("bid");
+>>>>>>> Stashed changes
 	}
 }
 
@@ -154,7 +152,11 @@ dom.balance.innerText = localStorage.getItem("balance");
 function startGame()
 {
     bidPlaced();
-    localStorage.setItem("bid", dom.bid.value);
+	let bid = function(){
+		return Number(dom.bid.value) < Number(localStorage.getItem("balance")) ? dom.bid.value : localStorage.getItem("balance");
+	}
+    localStorage.setItem("bid", bid());
+	dom.bidValue.innerText = localStorage.getItem("bid");
 
     // Reset cards to fix mobile but where img spots dont reset (1.1.1)
     if (localStorage.getItem("cardsOnHandBot")){
@@ -438,6 +440,7 @@ async function end(statement, refresh)
 			if (localStorage.getItem("refresh") != "true"){
 				localStorage.setItem("balance", Math.round(Number(localStorage.getItem("balance")) - Number(localStorage.getItem("bid"))));
 			}
+			nextBid = bidMin;
 			localStorage.setItem("refresh", "true")
 			break;
 
@@ -448,6 +451,7 @@ async function end(statement, refresh)
 				localStorage.setItem("balance", Math.round(Number(localStorage.getItem("balance")) + Number(localStorage.getItem("bid")) + Number(localStorage.getItem("bid"))/2));
 				win();
 			}
+			nextBid = localStorage.getItem("bid");
 			localStorage.setItem("refresh", "true")
 			break;
 
@@ -458,6 +462,7 @@ async function end(statement, refresh)
 				localStorage.setItem("balance", Math.round(Number(localStorage.getItem("balance")) + Number(localStorage.getItem("bid"))));
 				win();
 			}
+			nextBid = localStorage.getItem("bid");
 			localStorage.setItem("refresh", "true")
 			break;
 
@@ -468,6 +473,7 @@ async function end(statement, refresh)
 				localStorage.setItem("balance", Math.round(Number(localStorage.getItem("balance")) + Number(localStorage.getItem("bid"))));
 				win();
 			}
+			nextBid = localStorage.getItem("bid");
 			localStorage.setItem("refresh", "true")
 			break;
 		
@@ -477,15 +483,18 @@ async function end(statement, refresh)
 			if (localStorage.getItem("refresh") != "true"){
 				localStorage.setItem("balance", Math.round(Number(localStorage.getItem("balance")) - Number(localStorage.getItem("bid"))));
 			}
+			nextBid = bidMin;
 			localStorage.setItem("refresh", "true")
 			break;
 
 		default: // Tie
 			dom.result.innerText = "It's a Tie! (+0%)";
 			dom.newRound.classList.remove("hide");
+			nextBid = localStorage.getItem("bid");
 			localStorage.setItem("refresh", "true")
 			break;
 	}
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 	dom.bid.value = dom.bid.min;
 	dom.bidValue.value = dom.bid.min;
@@ -496,6 +505,11 @@ async function end(statement, refresh)
 	}
 	dom.bid.value = nextBid();
 	dom.bidValue.innerText = nextBid();
+=======
+	dom.bid.value = nextBid;
+	dom.bidValue.innerText = nextBid;
+	dom.bidValueInput.value = nextBid;
+>>>>>>> Stashed changes
 		
 	dom.balance.innerText = localStorage.getItem("balance")
 >>>>>>> 1.4
@@ -530,7 +544,6 @@ async function checkBalance(){
 					dom.outOfMoney.classList.remove("hide");
 					dom.balanceTooSmall.innerText = localStorage.getItem("balance");
 					dom.highscoreAfter.innerText = localStorage.getItem("highscore");
-					document.querySelector("#submit-highscore").classList.remove("hide")
 				}
 		});
 	}
@@ -547,8 +560,6 @@ function win()
 		localStorage.setItem("highscore", localStorage.getItem("balance"))
 	}
 	dom.highscore.innerText = localStorage.getItem("highscore");
-	document.submitform.username.value = localStorage.getItem("username");
-	document.submitform.highscoresubmit.value = localStorage.getItem("highscore");
 }
 
 function selectBid(){
@@ -597,17 +608,4 @@ function bidNotPlaced()
     dom.newRound.classList.remove("hide");
     dom.hit.classList.add("hide");
 	dom.stnd.classList.add("hide");
-}
-
-async function nameSubmited()
-{
-	localStorage.setItem("username", dom.name.value)
-	dom.form.classList.add("hide");
-	dom.main.classList.remove("hide");
-	dom.outOfMoney.classList.add("hide");
-	localStorage.setItem("submit", "true");
-	await newDeck();
-	bidNotPlaced();
-	dom.bidValue.innerHTML = localStorage.getItem("bid");
-	document.querySelector("#submit-highscore").classList.remove("hide")
 }
