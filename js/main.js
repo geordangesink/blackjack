@@ -19,7 +19,6 @@ const dom = {
     bidLabel: document.querySelector("#place-bid"),
     bidValue: document.querySelector("#bid-value"),
 	bidValueInput: document.querySelector("#bid-value-input"),
-	bidSelect: document.querySelector("#select-bid"),
     bidValueLabel: document.querySelector("#bid-placed"),
     pointsBot: document.querySelector("#points-bot"),
     pointsPlayer: document.querySelector("#points-player"),
@@ -28,8 +27,9 @@ const dom = {
     balanceTooSmall : document.querySelector("#balance"),
 	highscore: document.querySelector("#highscore"),
 	highscoreAfter: document.querySelector("#highscore-after"),
-
+	
     // Buttons
+	bidSelect: document.querySelector("#select-bid"),
     newRound: document.querySelector("#get-deck"),
     hit: document.querySelector("#hit"),
     stnd: document.querySelector("#stand"),
@@ -289,6 +289,8 @@ async function drawCard(entity, image, value)
 // Show hand
 async function stand(refresh)
 {
+	dom.hit.classList.add("hide");
+	dom.stnd.classList.add("hide");
 	overTwentyOne("player", "playerCardsValue", refresh);
 	overTwentyOne("bot", "botCardsValue", refresh);
 	localStorage.setItem("botShow", "true");
